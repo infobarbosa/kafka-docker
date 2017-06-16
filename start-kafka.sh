@@ -86,12 +86,12 @@ fi
 
 # The number of messages to accept before forcing a flush of data to disk
 if [ -n "$LOG_FLUSH_INTERVAL_MESSAGES" ]; then
-  echo "log.flush.interval.messages=$LOG_FLUSH_INTERVAL_MESSAGES" >> $KAFKA_PROPS
+  sed -r -i "s/(log.flush.interval.messages)=(.*)/\1=$LOG_FLUSH_INTERVAL_MESSAGES/g" $KAFKA_PROPS
 fi
 
 # The maximum amount of time a message can sit in a log before we force a flush
 if [ -n "$LOG_FLUSH_INTERVAL_MS" ]; then
-  echo "log.flush.interval.ms=$LOG_FLUSH_INTERVAL_MS" >> $KAFKA_PROPS
+  sed -r -i "s/(log.flush.interval.ms)=(.*)/\1=$LOG_FLUSH_INTERVAL_MS/g" $KAFKA_PROPS
 fi
 
 ############################# Log Retention Policy #############################
@@ -102,32 +102,26 @@ fi
 # from the end of the log.
 
 # The minimum age of a log file to be eligible for deletion
-if [ -z "$LOG_RETENTION_HOURS" ]; then
-  export LOG_RETENTION_HOURS=168
+if [ -n "$LOG_RETENTION_HOURS" ]; then
+  sed -r -i "s/(log.retention.hours)=(.*)/\1=$LOG_RETENTION_HOURS/g" $KAFKA_PROPS
 fi
-
-echo "log.retention.hours=$LOG_RETENTION_HOURS" >> $KAFKA_PROPS
 
 # A size-based retention policy for logs. Segments are pruned from the log as long as the remaining
 # segments don't drop below log.retention.bytes.
 if [ -n "$LOG_RETENTION_BYTES" ]; then
-  echo "log.retention.bytes=$LOG_RETENTION_BYTES" >> $KAFKA_PROPS
+  sed -r -i "s/(log.retention.bytes)=(.*)/\1=$LOG_RETENTION_BYTES/g" $KAFKA_PROPS
 fi
 
 # The maximum size of a log segment file. When this size is reached a new log segment will be created.
-if [ -z "$LOG_SEGMENT_BYTES" ]; then
-  export LOG_SEGMENT_BYTES=1073741824
+if [ -n "$LOG_SEGMENT_BYTES" ]; then
+  sed -r -i "s/(log.segment.bytes)=(.*)/\1=$LOG_SEGMENT_BYTES/g" $KAFKA_PROPS
 fi
-
-echo "log.segment.bytes=$LOG_SEGMENT_BYTES" >> $KAFKA_PROPS
 
 # The interval at which log segments are checked to see if they can be deleted according
 # to the retention policies
-if [ -z "$LOG_RETENTION_CHECK_INTERVAL_MS" ]; then
-  export LOG_RETENTION_CHECK_INTERVAL_MS=300000
+if [ -n "$LOG_RETENTION_CHECK_INTERVAL_MS" ]; then
+  sed -r -i "s/(log.retention.check.interval.ms)=(.*)/\1=$LOG_RETENTION_CHECK_INTERVAL_MS/g" $KAFKA_PROPS
 fi
-
-echo "log.retention.check.interval.ms=$LOG_RETENTION_CHECK_INTERVAL_MS" >> $KAFKA_PROPS
 
 ############################# Zookeeper #############################
 
@@ -142,7 +136,7 @@ fi
 
 # Timeout in ms for connecting to zookeeper
 if [ -n "$ZOOKEEPER_CONNECTION_TIMEOUT_MS" ]; then
-  sed -r -i "s/(zookeeper.connection.timeout)=(.*)/\1=$ZOOKEEPER_CONNECTION_TIMEOUT_MS/g" $KAFKA_PROPS
+  sed -r -i "s/(zookeeper.connection.timeout.ms)=(.*)/\1=$ZOOKEEPER_CONNECTION_TIMEOUT_MS/g" $KAFKA_PROPS
 fi
 
 #inicializando o kafka (parte do pressuposto de que o zookeeper já está em execuçao em outra máquina)
