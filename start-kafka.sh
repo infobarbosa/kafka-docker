@@ -49,7 +49,7 @@ if [ -n "$SOCKET_RECEIVE_BUFFER_BYTES" ]; then
 fi
 
 # The maximum size of a request that the socket server will accept (protection against OOM)
-if [ -z "$SOCKET_REQUEST_MAX_BYTES" ]; then
+if [ -n "$SOCKET_REQUEST_MAX_BYTES" ]; then
   sed -r -i "s/(socket.request.max.bytes)=(.*)/\1=$SOCKET_REQUEST_MAX_BYTES/g" $KAFKA_PROPS
 fi
 
@@ -69,11 +69,9 @@ fi
 
 # The number of threads per data directory to be used for log recovery at startup and flushing at shutdown.
 # This value is recommended to be increased for installations with data dirs located in RAID array.
-if [ -z "$NUM_RECOVERY_THREADS_PER_DATA_DIR" ]; then
-  export NUM_RECOVERY_THREADS_PER_DATA_DIR=1
+if [ -n "$NUM_RECOVERY_THREADS_PER_DATA_DIR" ]; then
+  sed -r -i "s/(num.recovery.threads.per.data.dir)=(.*)/\1=$NUM_RECOVERY_THREADS_PER_DATA_DIR/g" $KAFKA_PROPS
 fi
-
-echo "num.recovery.threads.per.data.dir=$NUM_RECOVERY_THREADS_PER_DATA_DIR" >> $KAFKA_PROPS
 
 ############################# Log Flush Policy #############################
 
