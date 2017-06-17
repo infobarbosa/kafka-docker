@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # Licensed to the Apache Software Foundation (ASF) under one or more
 # contributor license agreements.  See the NOTICE file distributed with
 # this work for additional information regarding copyright ownership.
@@ -16,6 +18,8 @@
 # see kafka.server.KafkaConfig for additional details and defaults
 
 #################################################################################
+
+echo "Iniciando setup de variaveis em $KAFKA_HOME/config/server.properties"
 
 #Variaveis importantes no script
 export KAFKA_HOME=/opt/kafka
@@ -139,7 +143,9 @@ if [ -n "$ZOOKEEPER_CONNECTION_TIMEOUT_MS" ]; then
   sed -r -i "s/(zookeeper.connection.timeout.ms)=(.*)/\1=$ZOOKEEPER_CONNECTION_TIMEOUT_MS/g" $KAFKA_PROPS
 fi
 
-#inicializando o kafka (parte do pressuposto de que o zookeeper já está em execuçao em outra máquina)
+echo "Setup de server.properties finalizado"
+
+echo "Inicializando o kafka (parte do pressuposto de que o zookeeper já está em execuçao em outra máquina)"
 cd $KAFKA_HOME
 
 bin/kafka-server-start.sh config/server.properties
