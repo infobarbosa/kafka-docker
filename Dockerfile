@@ -17,10 +17,10 @@ RUN apk add --no-cache wget bash \
     && wget -q -O - $MIRROR/kafka/"$KAFKA_VERSION"/$KAFKA_ARTIFACT | tar -xzf - -C /opt \
     && mv /opt/kafka_$SCALA_VERSION-$KAFKA_VERSION $KAFKA_HOME
 
-COPY start-kafka.sh /kafka-starter/
+COPY start.sh /kafka-starter/
 
-RUN chmod +x /kafka-starter/start-kafka.sh
+RUN chmod +x /kafka-starter/start.sh
 
 EXPOSE 9092
 
-CMD ["/kafka-starter/start-kafka.sh"]
+CMD ["/kafka-starter/start.sh"]
